@@ -100,6 +100,7 @@ class _LoginState extends State<Login> {
           textColor: Colors.white,
         ),
         backgroundColor: Colors.blueGrey,
+
         appBar: AppBar(
           backgroundColor: Colors.red,
           title: Row(
