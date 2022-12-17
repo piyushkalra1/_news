@@ -15,9 +15,9 @@ class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) =>
       OutlinedButton(
           style: TextButton.styleFrom(
-            backgroundColor: isFavorite?Colors.yellow :Colors.white12,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(20),)
-            ),
+            backgroundColor: isFavorite?Colors.yellow.shade800 :Colors.white12,
+            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(20),right: Radius.circular(20),)
+            // ),
           ),
           onPressed: onPressed,
           child: Text(text,style: TextStyle(color: Colors.black),));

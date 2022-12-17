@@ -3,6 +3,9 @@ import 'package:email_verfiy/const/quotes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'const/image_slider.dart';
+import 'const/slider.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp( MyApp());
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
 
               primarySwatch: Colors.blue,
             ),
+            // home: ImageSlider(),
             home: Login(),
           );
         });

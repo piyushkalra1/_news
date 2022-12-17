@@ -4,6 +4,7 @@ import 'package:email_verfiy/news.dart';
 import 'package:email_verfiy/pages/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../const/image_slider.dart';
 import 'forget_password.dart';
 import 'home.dart';
 import 'topbutton.dart';
@@ -25,6 +26,14 @@ class _LoginState extends State<Login> {
 
   TextEditingController emailController = TextEditingController();
   final passwordController = TextEditingController();
+  FocusNode emailFocusNode =FocusNode();
+  FocusNode passwordFocusNode =FocusNode();
+
+
+
+  ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+
+
 
   userLogin() async {
     try {
@@ -34,7 +43,7 @@ class _LoginState extends State<Login> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => News(),
+            builder: (context) => ImageSlider(),
           ),
         );
       });
@@ -71,6 +80,10 @@ class _LoginState extends State<Login> {
     // Clean up the controller when the widget is disposed.
     emailController.dispose();
     passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+
+    _obscurePassword.dispose();
     super.dispose();
   }
   final selectedIndexNotifier = ValueNotifier<int?>(1);
@@ -79,14 +92,9 @@ class _LoginState extends State<Login> {
     return Form(
       key: _formKey,
       child: Scaffold(
-        bottomNavigationBar: FlatButton(
-          focusColor: Colors.red,
-          minWidth: MediaQuery.of(context).size.width,
-          height: 55,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
 
-          child: Text(' Login', style: TextStyle(fontSize: 24,color: Colors.white)),
-          onPressed: (){
+        bottomNavigationBar:InkWell(
+          onTap: (){
             if(_formKey.currentState!.validate()){
               setState(() {
                 email=emailController.text;
@@ -96,95 +104,100 @@ class _LoginState extends State<Login> {
               userLogin();
             }
           },
-          color: Colors.red,
-          textColor: Colors.white,
-        ),
-        backgroundColor: Colors.blueGrey,
+          child: Container(
+            height: 50,
+            margin: const EdgeInsets.symmetric(horizontal: 10),
 
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: Row(
-            children: [
-              Text('Social'),
-              Text('X'),
-            ],
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.yellow.shade800,
+
+            ),child: Center(
+            child: Text('REGISTER',style: TextStyle(fontSize: 25,color: Colors.white),),
+          ),
+
           ),
         ),
+        // FloatingActionButton(
+        //
+        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        //
+        //   child: Text(' Login', style: TextStyle(fontSize: 24,color: Colors.white)),
+        //   onPressed: (){
+        //     if(_formKey.currentState!.validate()){
+        //       setState(() {
+        //         email=emailController.text;
+        //         password =passwordController.text;
+        //
+        //       });
+        //       userLogin();
+        //     }
+        //   },
+        //   // color: Colors.red,
+        //   // textColor: Colors.white,
+        // ),
+        backgroundColor: Colors.white,
 
+        body:SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Card(
+                //     color: Colors.red,
+                //
+                //
+                //     child: ValueListenableBuilder<int?>(
+                //
+                //         valueListenable: selectedIndexNotifier,
+                //         builder: (_, selectedIndex, __) => Row(
+                //           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             MyWidget(
+                //                 key: ValueKey(1),
+                //                 text: "Login",
+                //                 isFavorite: selectedIndex == 1,
+                //                 onPressed: (){
+                //                   selectedIndex == 1 ? selectedIndexNotifier.value = null : selectedIndexNotifier.value = 1;
+                //                   setState(() {
+                //
+                //
+                //                   });
+                //                 }
+                //             ),
+                //             MyWidget(
+                //                 key: ValueKey(2),
+                //                 text: " Sign Up",
+                //
+                //                 isFavorite: selectedIndex == 2,
+                //                 onPressed: () { selectedIndex == 2 ? selectedIndexNotifier.value = null : selectedIndexNotifier.value = 2;
+                //                 setState(() {
+                //                   Navigator.push(context, MaterialPageRoute(builder: (context)=>Signup()));
+                //                 });
+                //                 }
+                //             ),
+                //
+                //           ],
+                //         ))),
+                Container(
 
-        body:SingleChildScrollView(
-          child: Column(
-            children: [
-              Card(
-                  color: Colors.red,
-
-
-                  child: ValueListenableBuilder<int?>(
-
-                      valueListenable: selectedIndexNotifier,
-                      builder: (_, selectedIndex, __) => Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MyWidget(
-                              key: ValueKey(1),
-                              text: "Login",
-                              isFavorite: selectedIndex == 1,
-                              onPressed: (){
-                                selectedIndex == 1 ? selectedIndexNotifier.value = null : selectedIndexNotifier.value = 1;
-                                setState(() {
-
-
-                                });
-                              }
-                          ),
-                          MyWidget(
-                              key: ValueKey(2),
-                              text: " Sign Up",
-
-                              isFavorite: selectedIndex == 2,
-                              onPressed: () { selectedIndex == 2 ? selectedIndexNotifier.value = null : selectedIndexNotifier.value = 2;
-                              setState(() {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Signup()));
-                              });
-                              }
-                          ),
-
-                        ],
-                      ))),
-              Container(
-
-                // padding:EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*.70,
-
-
-                child:Card(
-
-                  elevation: 100,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-
-
-                  // color: Colors.purple[300],
-                  child: ListView(
+                  // padding:EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  margin: EdgeInsets.all(20),
+                  child:ListView(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 30),
-                        child: Text('SignIn into your Project',style: TextStyle(fontSize: 25,color: Colors.red,fontWeight: FontWeight.bold),),
 
-                      ),
                       Column(
-
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text('Log in to get started',style:  TextStyle(fontSize: 20,color: Colors.black45,fontWeight: FontWeight.w300),),
+                          SizedBox(height: 20,),
+                          Text('Experience the all new App!',style:  TextStyle(fontSize: 20,color: Colors.black45,fontWeight: FontWeight.w300),),
+
                           SizedBox(height: 10,),
-                          Row(
-                            children: [
-                              Container(margin: EdgeInsets.only(left: 20),
-                                child:  Text('Email'),),
-                            ],
-                          ),
+
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 10),
 
@@ -200,38 +213,33 @@ class _LoginState extends State<Login> {
                                   onChanged: (value){
 
                                   },
-
                                   decoration: const InputDecoration(
-                                      hintText: 'johndoe@gmail.com',
-                                      errorStyle: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
-                                      )
+                                    labelText: 'E-mail Id',
+                                    prefixIcon: Icon(Icons.mail),
                                   ),
+
                                   controller: emailController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please Enter Email';
-                                    } else if (!value.contains('@')) {
-                                      return 'Please Enter Valid Email';
+                                  validator: (value){
+                                    if(value==null || value.isEmpty){
+                                      return 'please enter name';
+                                    }
+                                    else if (!value.contains('@')){
+                                      return 'Please enter valid email';
                                     }
                                     return null;
                                   },
+
+
                                 ),
                                 ),
+
+
                                 SizedBox(width: 10,),
-                                Icon(Icons.email_outlined,color: Colors.black38,),
                               ],
                             ),
                           ),
                           SizedBox(height: 15,),
-                          Row(
-                            children: [
-                              Container(margin: EdgeInsets.only(left: 20),
-                                child:  Text('Password'),),
-                            ],
-                          ),
-                          SizedBox(height: 10,),
+
 
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 10),
@@ -240,35 +248,43 @@ class _LoginState extends State<Login> {
                               children: [
 
 
-                                SizedBox(width: 12,),
 
-                                Expanded(child: TextFormField(
-                                  autofocus: false,
-                                  obscureText: true,
+                                Expanded(child: ValueListenableBuilder(valueListenable: _obscurePassword,
+                                builder: (context,value,child){
+                                  return TextFormField(
 
-                                  onChanged: (value){
+                                    focusNode: passwordFocusNode,
 
-                                  },
+                                    obscureText: _obscurePassword.value,
+                                    obscuringCharacter: '*',
+                                    decoration: InputDecoration(
+                                        hintText: 'Password',
+                                        labelText: 'Password',
+                                        prefixIcon: Icon(Icons.lock),
+                                        suffixIcon: InkWell(
+                                          onTap: (){
+                                            _obscurePassword.value =! _obscurePassword.value;
+                                          },
+                                          child: _obscurePassword.value ? Icon(Icons.visibility_off_outlined):
+                                          Icon(Icons.visibility),
+                                        )
 
-                                  decoration: const InputDecoration(
-                                    hintText: 'Password',
-
-                                    errorStyle: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 15,
                                     ),
-                                  ),
-                                  controller: passwordController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please Enter Password';
-                                    }
-                                    return null;
-                                  },
+                                    controller: passwordController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please Enter Password';
+                                      }
+                                      return null;
+                                    },
+                                  );
+
+                                }
+                                )
+
 
                                 ),
-                                ),
-                                Icon(Icons.lock),
+                                // Icon(Icons.lock),
                               ],
                             ),
                           ),
@@ -277,42 +293,27 @@ class _LoginState extends State<Login> {
                             children: [
                               Spacer(),
                               TextButton(onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
                               },
-                                child:Text('Forgot Password ?',style: TextStyle(fontWeight: FontWeight.bold),),
+                                child:Text('Use Mobile Number',style: TextStyle(fontWeight: FontWeight.w400,
+                                color: Colors.yellow.shade800),),
 
                               )
                             ],
                           ),
-                          Text('Login With' ),
-                          SizedBox(height: 10,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 40,width: 40,
-                                child: const Image(
-                                  image: AssetImage('images/g.jpg'),
-                                ),
-                              ),
-                              SizedBox(width: 20,),
-                              Container(
-                                height: 40,width: 40,
-                                child: Image(
-                                  image: AssetImage('images/f.jpg'),
-                                ),
-                              ),
-                            ],
-                          ),
+
                           SizedBox(height: 10,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("Don't have an account?"),
-                              TextButton(onPressed: (){}, child: Text('Register Now',style: TextStyle(color: Colors.red),)),
+                              TextButton(onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Signup()));
+                              }, child: Text('Sign Up Now',style: TextStyle(color: Colors.red),)),
 
                             ],
                           ),
+
 
 
 
@@ -321,8 +322,10 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                 ),
-              )
-            ],
+
+                Text('hii',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),),
+              ],
+            ),
           ),
         ),
       ),

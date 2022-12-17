@@ -333,12 +333,22 @@ class _SignupState extends State<Signup> {
   var password = "";
   var confirmPassword = "";
   var name="";
+  var phone="";
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final nameController= TextEditingController();
+  final phoneControlleer = TextEditingController();
+  FocusNode emailFocusNode =FocusNode();
+  FocusNode passwordFocusNode =FocusNode();
+  FocusNode confirmpasswordFocusNode =FocusNode();
+
+
+
+  ValueNotifier<bool> _obscurePassword = ValueNotifier<bool>(true);
+  ValueNotifier<bool> _obscureconfirmPassword = ValueNotifier<bool>(true);
 
   @override
   void dispose() {
@@ -346,6 +356,12 @@ class _SignupState extends State<Signup> {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    phoneControlleer.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    confirmpasswordFocusNode.dispose();
+    _obscureconfirmPassword.dispose();
+    _obscurePassword.dispose();
     super.dispose();
   }
 
@@ -355,7 +371,7 @@ class _SignupState extends State<Signup> {
           .createUserWithEmailAndPassword(email: email, password: password);
       print(userCredential);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           backgroundColor: Colors.redAccent,
           content: Text(
             "Registered Successfully. Please Login..",
@@ -373,7 +389,7 @@ class _SignupState extends State<Signup> {
       if (e.code == 'weak-password') {
         print("Password Provided is too Weak");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: Colors.orangeAccent,
             content: Text(
               "Password Provided is too Weak",
@@ -384,7 +400,7 @@ class _SignupState extends State<Signup> {
       } else if (e.code == 'email-already-in-use') {
         print("Account Already exists");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: Colors.orangeAccent,
             content: Text(
               "Account Already exists",
@@ -459,242 +475,284 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: FlatButton(
-        focusColor: Colors.red,
-        minWidth: MediaQuery.of(context).size.width,
-        height: 55,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-        child: Text(' Register', style: TextStyle(fontSize: 24,color: Colors.white)),
-        onPressed: (){
-          setState(() {
-            if(_formKey.currentState!.validate()){
-              email =emailController.text;
-              password =passwordController.text;
-              registration();
-            }
-          });
-        },
-        color: Colors.red,
-        textColor: Colors.white,
-      ),
-
-      body:Form(
-
-        key: _formKey,
-        child: Container(
-
-          // padding:EdgeInsets.all(10),
-          width: MediaQuery.of(context).size.width,
-          child:Card(
-            elevation: 100,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
 
 
-            // color: Colors.purple[300],
-            child: ListView(
+      body:SafeArea(
+        child: Form(
 
-              shrinkWrap: true,
-              children: [
-                Column(
+          key: _formKey,
+          child: Container(
 
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    Text(
-                      'Create an Account ',
-                      style: TextStyle(color: Colors.red,
-                          fontSize: 30,fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 30,),
-                    Text('Name',style: TextStyle(fontWeight: FontWeight.bold),),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+            // padding:EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width,
+            child:Card(
+              elevation: 100,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
 
 
-                      child: Row(
-                        children: [
+              // color: Colors.purple[300],
+              child: ListView(
 
+                shrinkWrap: true,
+                children: [
+                  Column(
 
-                          Expanded(child: TextFormField(
-                            autofocus: false,
-                            onChanged: (value){
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
 
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Name'
-                            ),
-
-                            controller: nameController,
-                            validator: (value){
-                              if(value==null || value.isEmpty){
-                                return 'please enter name';
-                              }
-                              return null;
-                            },
-
-
-                          ),
-                          ),
-                          Icon(Icons.manage_accounts,color: Colors.red,),
-
-
-                        ],
+                    children: [
+                      const Text(
+                        'Register in to get started ',
+                        style: TextStyle(color: Colors.black54,
+                            fontSize: 20,),
                       ),
-                    ),
-                    Text('Email',style: TextStyle(fontWeight: FontWeight.bold),),
-
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-
-
-                      child: Row(
-                        children: [
-
-
-                          Expanded(child: TextFormField(
-                            autofocus: false,
-                            onChanged: (value){
-
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'Email'
-                            ),
-
-                            controller: emailController,
-                            validator: (value){
-                              if(value==null || value.isEmpty){
-                                return 'please enter name';
-                              }
-                              else if (!value.contains('@')){
-                                return 'Please enter valid email';
-                              }
-                              return null;
-                            },
-
-
-                          ),
-                          ),
-                          Icon(Icons.email_outlined,color: Colors.red,),
-
-
-                        ],
+                      const SizedBox(height: 15,),
+                      const Text(
+                        'Experience the all new App! ',
+                        style: TextStyle(color: Colors.black54,
+                          fontSize: 20,),
                       ),
-                    ),
-                    SizedBox(height: 15,),
-                    Text('Contact no'),
-                    Row(
-                      children: [
-                        Image(
-                          height: 80,width: 30,
-                          image: AssetImage(
-                              'images/t.jpg'
-                          ),
-                        ),SizedBox(width: 10,),
-                        Text('IN +91'),
-                        Icon(Icons.arrow_drop_down),
-                        SizedBox(width: 10,),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                labelText: "9876543210"
+
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+
+
+                        child: Row(
+                          children: [
+
+                            Expanded(child: TextFormField(
+                              autofocus: false,
+                              onChanged: (value){
+
+                              },
+                              decoration: const InputDecoration(
+                                  labelText: 'Name',
+                                prefixIcon: Icon(Icons.manage_accounts_rounded),
+                              ),
+
+                              controller: nameController,
+                              validator: (value){
+                                if(value==null || value.isEmpty){
+                                  return 'please enter name';
+                                }
+                                return null;
+                              },
+
+
                             ),
-                          ),
+                            ),
+
+
+
+                          ],
                         ),
-                        Icon(Icons.phone,color: Colors.red,),
+                      ),
+                      SizedBox(height: 20,),
 
-                      ],
-                    ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
 
 
-                    //
-                    //
-                    //
-                    //
-                    SizedBox(height: 15,),
-                    Text('Password'),
+                        child: Row(
+                          children: [
 
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+                            Expanded(child: TextFormField(
+                              autofocus: false,
+                              onChanged: (value){
 
-                      child: Row(
-                        children: [
+                              },
+                              decoration: const InputDecoration(
+                                  labelText: 'Email',
+                                prefixIcon: Icon(Icons.mail),
+                              ),
 
+                              controller: emailController,
+                              validator: (value){
+                                if(value==null || value.isEmpty){
+                                  return 'please enter name';
+                                }
+                                else if (!value.contains('@')){
+                                  return 'Please enter valid email';
+                                }
+                                return null;
+                              },
+
+
+                            ),
+                            ),
+
+
+
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 15,),
+                      Row(
+                        children:  [
 
                           Expanded(child: TextFormField(
+                            autofocus: false,
                             onChanged: (value){
 
                             },
-                            autofocus: false,obscureText: true,
-                            decoration: InputDecoration(
-                                hintText: '*******'
+                            decoration: const InputDecoration(
+                              labelText: 'phone',
+                              prefixIcon: Icon(Icons.phone),
                             ),
-                            controller: passwordController,
+
+                            controller: phoneControlleer,
                             validator: (value){
                               if(value==null || value.isEmpty){
-                                return 'Please enter password';
+                                return 'please enter number';
+                              }
+                              else if (value.length!=10){
+                                return 'Please enter valid 10 digit number';
                               }
                               return null;
                             },
 
+
                           ),
                           ),
-                          Icon(Icons.lock,color: Colors.red,),
+
+
                         ],
                       ),
-                    ),
-                    // TextFormField(
-                    //   onChanged: (value){
-                    //
-                    //   },
-                    //   obscureText: true,
-                    //   autofocus: false,
-                    //   controller: confirmPasswordController,
-                    //   decoration: InputDecoration(
-                    //       // border: InputBorder.none,
-                    //       labelText: 'Confirm Password'
-                    //   ),
-                    //   validator: (value){
-                    //     if(value==null || value.isEmpty){
-                    //       return 'Please enter password';
-                    //     }
-                    //     return null;
-                    //
-                    //   },
-                    //
-                    // ),
 
-                    SizedBox(height:15,),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
 
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black12,
+
+                      const SizedBox(height: 15,),
+
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+
+                        child: Row(
+                          children: [
+                            Expanded(child:
+                            ValueListenableBuilder(valueListenable: _obscurePassword,
+                                builder: (context,value,child){
+                                  return TextFormField(
+
+                                    focusNode: passwordFocusNode,
+
+                                    obscureText: _obscurePassword.value,
+                                    obscuringCharacter: '*',
+                                    decoration: InputDecoration(
+                                        labelText: 'Password',
+                                        prefixIcon: Icon(Icons.lock),
+                                        suffixIcon: InkWell(
+                                          onTap: (){
+                                            _obscurePassword.value =! _obscurePassword.value;
+                                          },
+                                          child: _obscurePassword.value ? Icon(Icons.visibility_off_outlined):
+                                          Icon(Icons.visibility),
+                                        )
+
+                                    ),
+                                    controller: passwordController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please Enter Password';
+                                      }
+                                      return null;
+                                    },
+                                  );
+
+                                }
+                            ),
+                            ),
+
+                          ],
+                        ),
                       ),
 
-                    ),
+                      SizedBox(height: 20,),
+                      ValueListenableBuilder(valueListenable: _obscureconfirmPassword,
+                          builder: (context,value,child){
+                            return TextFormField(
 
-                    SizedBox(height: 30,),
+                              focusNode: confirmpasswordFocusNode,
+
+                              obscureText: _obscureconfirmPassword.value,
+                              obscuringCharacter: '*',
+                              decoration: InputDecoration(
+                                  labelText: 'confirmPassword',
+                                  prefixIcon: Icon(Icons.lock),
+                                  suffixIcon: InkWell(
+                                    onTap: (){
+                                      _obscureconfirmPassword.value =! _obscureconfirmPassword.value;
+                                    },
+                                    child: _obscureconfirmPassword.value ? Icon(Icons.visibility_off_outlined):
+                                    Icon(Icons.visibility),
+                                  )
+
+                              ),
+                              controller: confirmPasswordController,
+                              validator: (value){
+                                if(value==null||value !=passwordController.text || value.isEmpty){
+                                  return 'Please enter correct password';
+                                }
+                                return null;
+
+                              },
+                            );
+
+                          }
+
+                      ),
 
 
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Already have an Account",style: TextStyle(fontWeight: FontWeight.bold),),
-                        TextButton(onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
-                        }, child: Text('Sign In',style: TextStyle(color: Colors.red),)),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(height: 300,),
-              ],
+                      const SizedBox(height:55,),
+
+                      InkWell(
+                        onTap: (){
+                          setState(() {
+                            if(_formKey.currentState!.validate()){
+                              email =emailController.text;
+                              password =passwordController.text;
+                              confirmPassword =passwordController.text;
+                              phone=phoneControlleer.text;
+                              registration();
+                            }
+                          });
+                        },
+                        child: Container(
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.yellow.shade800,
+
+                          ),child: Center(
+                          child: Text('REGISTER',style: TextStyle(fontSize: 25,color: Colors.white),),
+                        ),
+
+                        ),
+                      ),
+
+                      const SizedBox(height: 30,),
+
+
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Already have an account",style: TextStyle(fontWeight: FontWeight.w400),),
+                          TextButton(onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+                          }, child: const Text('LogIn',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black))),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 300,),
+                ],
+              ),
             ),
           ),
         ),

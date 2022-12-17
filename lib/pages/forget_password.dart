@@ -16,8 +16,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   var email = "";
 
-  // Create a text controller and use it to retrieve the current value
-  // of the TextField.
   final emailController = TextEditingController();
 
   @override
